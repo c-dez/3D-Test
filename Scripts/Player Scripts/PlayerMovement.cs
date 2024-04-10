@@ -3,12 +3,13 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
    private CharacterController controller;
-   private Vector3 playerVelocity;
-   public bool isGrounded;
-   [SerializeField] private float playerSpeed;
+   public Vector3 fallingVelocity;
+   public bool isGrounded;// public for testing
+   [SerializeField] private float moveSpeedMod;
    [SerializeField] private float jumpHeight;
    private float Gravity = -10f;
-//    public bool isFalling;
+
+   private Vector3 move;
    
     
    private void Awake()
@@ -21,34 +22,36 @@ public class PlayerMovement : MonoBehaviour
         CheckIsGrounded();
         PlayerMove();
         PlayerJump();
-       
-       
-    //    if(isGrounded )
-    //    {
-    //         isFalling = false;
-    //    }
-    //    if(!isGrounded && playerVelocity.y < -1)
-    //    {
-    //         isFalling = true;
-    //    }
+        
 
+        //player rotation
+        float targetAngle = Mathf.Atan2
+        (move.x,move.z) * Mathf.Rad2Deg;
+
+        transform.rotation = Quaternion.Euler(0,targetAngle,0);
+       
+       //move
+       move = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+    
     }
 
-   
+    
+
+    
     private void CheckIsGrounded()
     {
         isGrounded = controller.isGrounded;
     }
     private void PlayerMove()
     {
-        if(isGrounded && playerVelocity.y < 0f)
+        if(isGrounded && fallingVelocity.y < 0f)
         {
-            playerVelocity.y = 0f;
+            fallingVelocity.y = 0f;
         }
 
-        Vector3 move = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
+        // Vector3 move = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         
-        controller.Move(move.normalized * Time.deltaTime * playerSpeed);
+        controller.Move(move.normalized * Time.deltaTime * moveSpeedMod);
 
     }
 
@@ -56,16 +59,13 @@ public class PlayerMovement : MonoBehaviour
     {
          if(Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            playerVelocity.y += Mathf.Sqrt(jumpHeight * -3f * Gravity);
+            fallingVelocity.y += Mathf.Sqrt(jumpHeight * -3f * Gravity);
         }
 
-        playerVelocity.y += Gravity * Time.deltaTime;
-        controller.Move(playerVelocity * Time.deltaTime);
-        
+        fallingVelocity.y += Gravity * Time.deltaTime;
+        controller.Move(fallingVelocity * Time.deltaTime);
+
     }
 
-    
-
    
-
 }
