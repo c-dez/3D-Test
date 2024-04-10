@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
    private CharacterController controller;
-   public Vector3 playerVelocity;
+   private Vector3 playerVelocity;
    private bool isGrounded;
    [SerializeField] private float playerSpeed;
    [SerializeField] private float jumpHeight;
@@ -21,7 +21,7 @@ public class PlayerMovement : MonoBehaviour
         PlayerMove();
         PlayerJump();
        
-       //git
+       
        if(isGrounded )
        {
             isFalling = false;
@@ -32,6 +32,8 @@ public class PlayerMovement : MonoBehaviour
        }
 
     }
+
+   
     
     private void PlayerMove()
     {
@@ -42,7 +44,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         Vector3 move = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
-        controller.Move(move * Time.deltaTime * playerSpeed);
+        
+        controller.Move(move.normalized * Time.deltaTime * playerSpeed);
 
     }
 
