@@ -4,11 +4,11 @@ public class PlayerMovement : MonoBehaviour
 {
    private CharacterController controller;
    private Vector3 playerVelocity;
-   private bool isGrounded;
+   public bool isGrounded;
    [SerializeField] private float playerSpeed;
    [SerializeField] private float jumpHeight;
    private float Gravity = -10f;
-   public bool isFalling;
+//    public bool isFalling;
    
     
    private void Awake()
@@ -18,26 +18,29 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        CheckIsGrounded();
         PlayerMove();
         PlayerJump();
        
        
-       if(isGrounded )
-       {
-            isFalling = false;
-       }
-       if(!isGrounded && playerVelocity.y < -1)
-       {
-            isFalling = true;
-       }
+    //    if(isGrounded )
+    //    {
+    //         isFalling = false;
+    //    }
+    //    if(!isGrounded && playerVelocity.y < -1)
+    //    {
+    //         isFalling = true;
+    //    }
 
     }
 
    
-    
-    private void PlayerMove()
+    private void CheckIsGrounded()
     {
         isGrounded = controller.isGrounded;
+    }
+    private void PlayerMove()
+    {
         if(isGrounded && playerVelocity.y < 0f)
         {
             playerVelocity.y = 0f;
